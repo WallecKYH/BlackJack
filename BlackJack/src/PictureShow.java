@@ -14,4 +14,5 @@ public class PictureShow extends Applet{
         g.drawImage(Picture,10,10,this);
     }
 
+
 }

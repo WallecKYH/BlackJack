@@ -1,5 +1,3 @@
-import java.applet.Applet;
-import java.awt.*;
 import java.util.Scanner;
 import java.util.*;
 
@@ -8,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         BlackJackGame mygame = new BlackJackGame();
+        Image image = new Image();
 
         //Creates variables
         int [][] deckValue = new int[52][2];
@@ -31,6 +30,8 @@ public class Main {
         //Creates a variable that randomizes the cards
         Random randGenerator = new Random();
         int randInt = randGenerator.nextInt (52);
+
+        image.picture();
 
         do {
             //Prints test cases

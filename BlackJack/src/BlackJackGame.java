@@ -1,6 +1,6 @@
 public class BlackJackGame {
 
-    //Skriver ut spelregler
+    //Prints game rules
     public void initializeGame(){
         System.out.println("");
         System.out.println("     Hej och välkommen till blackjack!");
@@ -14,7 +14,7 @@ public class BlackJackGame {
         System.out.println("");
     }
 
-    //Skapar Kortnamn, Arrayen deckName skickas upp tom och returneras med kortnamn
+    //Creates cardnames , The deckName array is sent blank and returned with short name
     public static String[] Namn(String[] d) {
 
         d[0] = "HJärter Ess";
@@ -75,15 +75,15 @@ public class BlackJackGame {
         return d;
     }
 
-    //Skapar Kortlek och gör den klar med ettor (kort finns) och kortvärden, Arrayen deckValue skickas upp tom och returneras färdig
-    public static int[][] DeckFyll(int c[][]) {
+    //Creates Card game and completes it with ones (cards available) and card values, the Array deckValue is sent empty and returned ready
+    public static int[][] CreateCardValue(int c[][]) {
 
-        //Skapar ettor
+        //Creates ones
         for (int i = 0; i < 52; i++) {
             c[i][0]=1;
         }
 
-        //Skapar kortvärdena
+        // Creates the card values
         for (int i = 0; i < 4; i++) {
             c[13*i+0][1] = 11;
             c[13*i + 1][1] = 2;

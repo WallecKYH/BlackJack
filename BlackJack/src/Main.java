@@ -1,3 +1,5 @@
+import java.applet.Applet;
+import java.awt.*;
 import java.util.Scanner;
 import java.util.*;
 
@@ -7,41 +9,42 @@ public class Main {
 
         BlackJackGame mygame = new BlackJackGame();
 
-        //Skapar variabler
+        //Creates variables
         int [][] deckValue = new int[52][2];
         String [] deckName = new String[52];
-        boolean svar;
-        String kort;
-        boolean kortFinns = false;
+        boolean Answer;
+        String Card;
+        boolean CardsAreAvailable = false;
         int DarkCard;
-        int Pengar;
-        String SpelaIgen;
+        int Money;
+        String PlayAgain;
         int [][] CounterValue = new int[2][2];
         CounterValue[1][1] = 100;
+       //these variables are for an alternative calculation of whether the ace should be 1 or 11
         int PointAlt;
         int PointAltD;
 
-        //Skapar Scanners
+        //Creates Scanners
         Scanner scan = new Scanner(System.in);
         Scanner scan2 = new Scanner(System.in);
 
-
+        //Creates a variable that randomizes the cards
         Random randGenerator = new Random();
         int randInt = randGenerator.nextInt (52);
 
         do {
-            //Skriver ut test casen
+            //Prints test cases
             System.out.println();
             System.out.println("*************Test Case*************");
             mainTest.test(deckValue);
-            svar = false;
-            BlackJackGame.DeckFyll(deckValue);
+            Answer = false;
+            BlackJackGame.CreateCardValue(deckValue);
             BlackJackGame.Namn(deckName);
             mainTest.test(deckValue);
             mainTest.TestValue(deckValue);
             mainTest.TestName(deckName);
             mainTest.TestPoint(CounterValue);
-            mainTest.TestSaldo(CounterValue);
+            mainTest.TestBalance(CounterValue);
             System.out.println("*************Test Case*************");
             System.out.println();
             mygame.initializeGame();
@@ -51,19 +54,20 @@ public class Main {
             PointAltD = 0;
             DarkCard = 0;
 
+            //Prints a question to the player how much he wants to bet
             System.out.println("Ditt saldo är " + CounterValue[1][1]);
             System.out.print("Hur mycket vill du satsa?");
-            Pengar = scan2.nextInt();
+            Money = scan2.nextInt();
 
             System.out.print("SPELARE");
             System.out.print("              ");
             System.out.println("DEALER");
 
-            //Slump av spelarens första kort
+            //Random player's first card
             do {
                 if (deckValue[randInt][0] == 0){
                     randInt = randGenerator.nextInt (52);
-                    kortFinns = false;
+                    CardsAreAvailable = false;
                 }
                 else if (deckValue[randInt][0] == 1){
                     deckValue[randInt][0] = 0;
@@ -76,14 +80,14 @@ public class Main {
                         CounterValue[1][0] = Counter.getSum(CounterValue[1][0], deckValue[randInt][1]);
                         PointAlt = Counter.getSum(PointAlt, deckValue[randInt][1]);
                     }
-                    kortFinns = true;
+                    CardsAreAvailable = true;
                 }
             }
-            while (kortFinns == false);
+            while (CardsAreAvailable == false);
 
-            //Slump av dealerns första kort
+            //Random of the dealer's first card
             do {
-                kortFinns = false;
+                CardsAreAvailable = false;
                 if (deckValue[randInt][0] == 0){
                     randInt = randGenerator.nextInt (52);
                 }
@@ -100,14 +104,14 @@ public class Main {
                         CounterValue[0][0] = Counter.getSum(CounterValue[0][0], deckValue[randInt][1]);
                         PointAltD = Counter.getSum(PointAltD, deckValue[randInt][1]);
                     }
-                    kortFinns = true;
+                    CardsAreAvailable = true;
                 }
             }
-            while (kortFinns == false);
+            while (CardsAreAvailable == false);
 
-            //Slump av spelarens andra kort
+            //Random player's second card
             do {
-                kortFinns = false;
+                CardsAreAvailable = false;
                 if (deckValue[randInt][0] == 0){
                     randInt = randGenerator.nextInt (52);
                 }
@@ -123,14 +127,14 @@ public class Main {
                         CounterValue[1][0] = Counter.getSum(CounterValue[1][0], deckValue[randInt][1]);
                         PointAlt = Counter.getSum(PointAlt, deckValue[randInt][1]);
                     }
-                    kortFinns = true;
+                    CardsAreAvailable = true;
                 }
             }
-            while (kortFinns == false);
+            while (CardsAreAvailable == false);
 
-            //Slump av dealerns andra kort (Det mörka kortet)
+            //Random of the dealer's second card (The dark card)
             do {
-                kortFinns = false;
+                CardsAreAvailable = false;
                 if (deckValue[randInt][0] == 0){
                     randInt = randGenerator.nextInt (52);
                 }
@@ -148,14 +152,14 @@ public class Main {
                         CounterValue[0][0] = Counter.getSum(CounterValue[0][0], deckValue[randInt][1]);
                         PointAltD = Counter.getSum(PointAltD, deckValue[randInt][1]);
                     }
-                    kortFinns = true;
+                    CardsAreAvailable = true;
                 }
             }
-            while (kortFinns == false);
+            while (CardsAreAvailable == false);
 
-            //Räknar ihop summan av spelarens kort
+            //Counts the sum of the player's cards
             do {
-                svar = true;
+                Answer = true;
 
                 if (PointAlt != CounterValue[1][0]){
                     System.out.println("Spelare har " + CounterValue[1][0] + " eller " + PointAlt);
@@ -164,12 +168,12 @@ public class Main {
                     System.out.println("Spelare har " + CounterValue[1][0]);
                 }
 
-                //Kollar om spelaren fick över 21
+                //Check if the player got over 21
                 if (CounterValue[1][0] > 21){
 
                     if (PointAlt > 21){
                         System.out.println("Spelare fick över 21 och är nu tjock!");
-                        svar = false;
+                        Answer = false;
                     }
                     else {
                         CounterValue[1][0] = PointAlt;
@@ -177,17 +181,17 @@ public class Main {
 
                 }
 
-                //Ger dig valet om du vill ha fler kort eller inte
+                //Gives you the choice of whether you want more cards or not
                 else if (CounterValue[1][0] < 21){
                     System.out.print("Vill du ha fler kort?");
-                    kort = scan.nextLine();
+                    Card = scan.nextLine();
 
-                    if (kort.equals("ja")) {
-                        svar = true;
+                    if (Card.equals("ja")) {
+                        Answer = true;
 
-                        //Om du svarar ja så får du ett kort till
+                        //If you answer yes, you will receive another card
                         do {
-                            kortFinns = false;
+                            CardsAreAvailable = false;
                             if (deckValue[randInt][0] == 0){
                                 randInt = randGenerator.nextInt (52);
                             }
@@ -202,26 +206,27 @@ public class Main {
                                     CounterValue[1][0] = Counter.getSum(CounterValue[1][0], deckValue[randInt][1]);
                                     PointAlt = Counter.getSum(PointAlt, deckValue[randInt][1]);
                                 }
-                                kortFinns = true;
+                                CardsAreAvailable = true;
                             }
                         }
-                        while (kortFinns == false);
+                        while (CardsAreAvailable == false);
 
                     }
-                    //Svarar du nej så stannar du på den summan du är på
-                    else if (kort.equals("nej")) {
+                    //If you answer no, you will stay on the amount you are on
+                    else if (Card.equals("nej")) {
                         System.out.println("Spelare stannade på " + CounterValue[1][0]);
-                        svar = false;
+                        Answer = false;
                     }
 
                 }
             }
-            while (svar == true);
+            while (Answer == true);
 
-            // Skriver ut dealerns mörka kort
+            // Prints the dealer's dark cards
             System.out.println("Dealerns mörka kort är " + deckName[DarkCard]);
 
-            //Skriver ut summan av dealerns kort
+
+            //Prints the sum of the dealer's cards
             if (PointAltD != CounterValue[0][0]){
                 System.out.println("Dealer har " + CounterValue[0][0] + " eller " + PointAltD);
             }
@@ -229,16 +234,17 @@ public class Main {
                 System.out.println("Dealer har " + CounterValue[0][0]);
             }
 
-            //Kollar om dealern har över 21 och skriver ut vad den fick
+            //Check if the dealer is over 21 and print out what it got
             do {
-                svar = true;
+                Answer = true;
 
                 if (CounterValue[0][0] > 21){
 
+                    //
                     if (PointAltD > 21){
                         System.out.println("Dealer fick " + CounterValue[0][0]);
                         System.out.println("Dealer fick över 21 och är nu tjock!");
-                        svar = false;
+                        Answer = false;
                     }
                     else {
                         CounterValue[0][0] = PointAltD;
@@ -246,13 +252,13 @@ public class Main {
 
                 }
 
-                //Kollar om dealern hamnar över 17, om den inte är det så slumpar den dealerns tredje kort,
+                //Check if the dealer ends up over 17, if it does not, that dealer randomly gets a new card until it ends up over 17
                 else if (CounterValue[0][0] <= 21){
 
                     if (CounterValue[0][0] < 17) {
 
                         do {
-                            kortFinns = false;
+                            CardsAreAvailable = false;
                             if (deckValue[randInt][0] == 0){
                                 randInt = randGenerator.nextInt (52);
                             }
@@ -269,33 +275,33 @@ public class Main {
                                     PointAltD = Counter.getSum(PointAltD, deckValue[randInt][1]);
                                 }
                                 System.out.println("Dealer har " + CounterValue[0][0]);
-                                kortFinns = true;
+                                CardsAreAvailable = true;
                             }
                         }
-                        while (kortFinns == false);
+                        while (CardsAreAvailable == false);
                     }
-                    //Om dealern har över 17 så stannar den
+                    //If the dealer has over 17, it stops
                     else if (CounterValue[0][0] >= 17){
                         System.out.println("Dealer stannade på " + CounterValue[0][0]);
-                        svar = false;
+                        Answer = false;
                     }
                 }
             }
-            while (svar == true);
+            while (Answer == true);
 
-            //Ett till test
+            //Another test
             System.out.println("");
             System.out.println("*************Test Case*************");
             mainTest.test(deckValue);
             System.out.println("*************Test Case*************");
             System.out.println("");
 
-            //Kollar om spelaren och dealern fick lika mycket poäng
+            //Check if the player and the dealer got the same number of points
             if (CounterValue[1][0] == CounterValue[0][0]){
                 System.out.println("Det blev lika!");
             }
 
-            //Kollar om spelaren och dealern fick över 21
+            //Check if the player and dealer got over 21
             if (CounterValue[1][0] > CounterValue[0][0]){
                 if (CounterValue[1][0] > 21){
                     if (CounterValue[0][0] > 21){
@@ -303,15 +309,15 @@ public class Main {
                     }
                     else if (CounterValue[0][0] <= 21){
                         System.out.println("Dealer vann!");
-                        CounterValue[1][1] = CounterValue[1][1] - Pengar;
+                        CounterValue[1][1] = CounterValue[1][1] - Money;
                     }
                 }
                 else if (CounterValue[1][0] <= 21){
                     System.out.println("Spelare vann!");
-                    CounterValue[1][1] = CounterValue[1][1] + Pengar;
+                    CounterValue[1][1] = CounterValue[1][1] + Money;
                 }
             }
-            //Kollar om spelaren och dealern fick över 21
+            //Check if the player and dealer got over 21
             else if (CounterValue[1][0] < CounterValue[0][0]){
                 if (CounterValue[0][0] > 21){
                     if (CounterValue[1][0] > 21){
@@ -319,34 +325,34 @@ public class Main {
                     }
                     else if (CounterValue[1][0] <= 21){
                         System.out.println("Spelare vann!!");
-                        CounterValue[1][1] = CounterValue[1][1] + Pengar;
+                        CounterValue[1][1] = CounterValue[1][1] + Money;
                     }
                 }
                 else if (CounterValue[0][0] <= 21){
                     System.out.println("Dealer vann!");
-                    CounterValue[1][1] = CounterValue[1][1] - Pengar;
+                    CounterValue[1][1] = CounterValue[1][1] - Money;
                 }
             }
 
-            //Skriver ut ditt saldo
+            //Prints your balance
             if (CounterValue[1][1] > 0){
                 System.out.println("Ditt saldo är " + CounterValue[1][1]);
                 System.out.print("Vill du spela igen?");
-                SpelaIgen = scan.nextLine();
+                PlayAgain = scan.nextLine();
 
-                if (SpelaIgen.equals("ja")) {
-                    svar = true;
+                if (PlayAgain.equals("ja")) {
+                    Answer = true;
 
                 }
 
             }
-
+            //Prints this if the player runs out of money
             else if (CounterValue[1][1] <= 0){
                 System.out.println("Du har slut på pengar, GAME OVER!");
-                svar = false;
+                Answer = false;
             }
         }
-        while (svar == true);
+        while (Answer == true);
 
     }
 }

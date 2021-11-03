@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Image {
-//
+    //Detta är inte med i projektet, jag testa att skriva ut bilder på slutet
     public static void picture() {
         File f = new File("./RuterDam.jpg");
         Desktop dt = Desktop.getDesktop();

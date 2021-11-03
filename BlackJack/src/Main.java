@@ -290,13 +290,6 @@ public class Main {
             }
             while (Answer == true);
 
-            //Another test
-            System.out.println("");
-            System.out.println("*************Test Case*************");
-            mainTest.test(deckValue);
-            System.out.println("*************Test Case*************");
-            System.out.println("");
-
             //Check if the player and the dealer got the same number of points
             if (CounterValue[1][0] == CounterValue[0][0]){
                 System.out.println("Det blev lika!");
@@ -334,6 +327,13 @@ public class Main {
                     CounterValue[1][1] = CounterValue[1][1] - Money;
                 }
             }
+
+            //Another test
+            System.out.println("");
+            System.out.println("*************Test Case*************");
+            mainTest.test(deckValue);
+            System.out.println("*************Test Case*************");
+            System.out.println("");
 
             //Prints your balance
             if (CounterValue[1][1] > 0){
